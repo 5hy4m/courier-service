@@ -3,12 +3,12 @@ from package import Package
 
 import json 
 
-def create_offers(offers):
+def createOffers(offers):
     # Gets Array of objects and convert them into class objects
     offers = [Offer(offer) for offer in offers]
     return offers
 
-def create_packages(no_of_packages):
+def createPackages(no_of_packages):
     packages = [Package(input().split( )) for _ in range(no_of_packages)]
     return packages
 
@@ -19,16 +19,18 @@ def main():
     f = open('offers.json')
     offers = json.load(f)
     f.close()
-    offers = create_offers(offers)
+    offers = createOffers(offers)
 
 
-    delivery_cost,no_of_packages = input().split( )
+    base_delivery_cost,no_of_packages = input().split( )
     no_of_packages = int(no_of_packages)
-    packages = create_packages(no_of_packages)
+    base_delivery_cost = int(base_delivery_cost)
+    packages = createPackages(no_of_packages)
 
-    import pdb;pdb.set_trace()
-    Package().calculate_total_delivery_cost()
-    
+
+
+    for package in packages:
+        package.calculateDeliveryCost(base_delivery_cost)
 
     # 100 3
     # PKG1 5 5 OFR001
