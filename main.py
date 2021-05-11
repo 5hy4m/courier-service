@@ -1,6 +1,7 @@
 from offer import Offer
 from package import Package
-# from vehicle import Vehicle
+from package_manager import PackageManager
+from vehicle import Vehicle
 
 import json 
 
@@ -12,11 +13,6 @@ def createOffers(offers):
 def createPackages(no_of_packages):
     packages = [Package(input().split( )) for _ in range(no_of_packages)]
     return packages
-
-# def createVehicles(no_of_packages):
-#     no_of_vehicles,max_speed,_max_weight = input().split( )
-#     vehicles = [Vehicle(max_speed,max_weight) for _ in range(no_of_vehicles)]
-#     return vehicles
 
 def main():
     print("Courier Service")
@@ -36,12 +32,22 @@ def main():
     #     package.calculateDeliveryCost(base_delivery_cost)
     
     no_of_vehicles,max_speed,max_weight = input().split( )
-    no_of_vehicles = float(no_of_vehicles)
+    no_of_vehicles = int(no_of_vehicles)
     max_speed = float(max_speed)
     max_weight = float(max_weight)
-    
+
+    for _ in range(no_of_vehicles):
+        Vehicle(max_speed,max_weight)
+
+    manager = PackageManager(base_delivery_cost,no_of_vehicles,max_speed,max_weight)
+
+    result = []
     for package in packages:
-        package.calculateTimeTaken(base_delivery_cost,no_of_vehicles,max_speed,max_weight)
+        manager.calculatePackages(base_delivery_cost,max_weight)
+
+    # for package in packages:
+    #     package.calculatePackages(base_delivery_cost,max_weight)
+        # package.calculatePackages(base_delivery_cost,no_of_vehicles,max_speed,max_weight)
 
 
     # 100 3

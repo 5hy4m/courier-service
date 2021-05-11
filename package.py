@@ -20,14 +20,14 @@ class Package(Offer):
     def checkOffer(self):
         if self.offer:
             if not self.distance >= self.offer.ll_distance and not self.distance <= self.offer.ul_distance:
-                print('Offer code not valid due to distance limitation')
+                # print('Offer code not valid due to distance limitation')
                 return False
             if not self.weight >= self.offer.ll_weight and not self.weight <= self.offer.ul_weight:
-                print('Offer code not valid due to weight limitation')
+                # print('Offer code not valid due to weight limitation')
                 return False
             return True
         else:
-            print('Offer code does not exist')
+            # print('Offer code does not exist')
             return False
 
     def summationOfTheArray(self,array):
@@ -41,9 +41,9 @@ class Package(Offer):
         if self.checkOffer():
             discount = delivery_cost * (self.offer.discount/100)
             delivery_cost -= discount 
-
-        print(self.name,discount,delivery_cost)
-        return delivery_cost
+        else:
+            discount = 0
+        return f'{self.name} {discount} {delivery_cost}'
     
     def recursive_package(self,package_weights,max_weight,combinations,current_index):
         if current_index >= len(package_weights):
@@ -62,7 +62,11 @@ class Package(Offer):
         combinations = []
         return self.recursive_package(package_weights,max_weight,combinations,0)
 
-    def calculateTimeTaken(self,base_delivery_cost,no_of_vehicles,max_speed,max_weight):
+    def useVehicle(self,selected_packages,no_of_vehicles,max_speed):
+        import pdb;pdb.set_trace()
+        pass
+    
+    def calculatePackages(self,base_delivery_cost,max_weight):
         package_weights = self.get_weights()
         current_time = 0 #hrs
         total_weight = 0
@@ -74,18 +78,16 @@ class Package(Offer):
                     for ele in elements:
                         print(ele.weight,ele.name)
                     print("="*50)
-                
                 if len(combinations) <= 1 or (len(combinations) >= 2 and len(combinations[-2]) <= len(combinations[-1])):
                     combinations.append(self.find_best(package_weights[index:],max_weight))
                 else:
                     combinations = combinations[:-1]
-                    import pdb;pdb.set_trace()
                     total_weight_array = [self.summationOfTheArray([combination.weight for combination in combination_arr]) for combination_arr in combinations]
                     # selected_packages = combinations[total_weight_array.index(max(total_weight_array))]
                     max_value = max(total_weight_array)
                     index_value = total_weight_array.index(max_value)
-                    selected_packages = combinations[index_value]
-                    self.useVehicle(selected_packages)
+                    return combinations[index_value]
+                    # self.useVehicle(selected_packages,no_of_vehicles,max_speed)
                     pass
 
         pass
