@@ -53,6 +53,5 @@ class TestOffer(unittest.TestCase):
                 "ul_weight" : "250"
             }])
 
-            
 if __name__ == '__main__':
     unittest.main()

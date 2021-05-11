@@ -6,7 +6,7 @@ from vehicle import Vehicle
 import json 
 
 def createOffers(offers):
-    # Gets Array of objects and convert them into class objects
+    # Gets list of objects and convert them into class objects
     offers = [Offer(offer) for offer in offers]
     return offers
 
@@ -14,13 +14,20 @@ def createPackages(no_of_packages):
     packages = [Package(input().split( )) for _ in range(no_of_packages)]
     return packages
 
+def readOffers():
+    try:
+        f = open('offers.json')
+        offers = json.load(f)
+        f.close()
+        return offers
+    except FileNotFoundError as e:
+        raise e
+
 def main():
     print("Courier Service")
     print("Please Enter The Input")
 
-    f = open('offers.json')
-    offers = json.load(f)
-    f.close()
+    offers = readOffers()
     offers = createOffers(offers)
 
     base_delivery_cost,no_of_packages = input().split( )
