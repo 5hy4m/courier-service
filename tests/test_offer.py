@@ -37,12 +37,9 @@ class TestOffer(unittest.TestCase):
         "ul_weight" : "250"
     }]
 
-    def test_createOffers(self):
-        results = createOffers(self.offers)
-        self.assertIsInstance(results,list)
-        for result in results:
-            self.assertIsInstance(result,Offer)
+    offers_objects = []
 
+    def test_createOffers(self):
         with self.assertRaises(ValueError):
             createOffers([{
                 "code" :  "OFR003",
@@ -52,6 +49,36 @@ class TestOffer(unittest.TestCase):
                 "ll_weight" : "qwerty",
                 "ul_weight" : "250"
             }])
+        
+        results = createOffers(self.offers)
+        self.assertIsInstance(results,list)
+        for result in results:
+            self.assertIsInstance(result,Offer)
+        self.offers_objects.extend(results)
+    
+    def test_createPackages(self):
+        createOffers(self.offers)
+        with self.assertRaises(ValueError):
+            Package(['PKG1' ,'50S', '30', 'OFR001'])
+            Package(['PKG2' ,'50', '30E', 'OFR001'])
+        
+        self.assertIsInstance(Package(['PKG1' ,'50', '30', 'OFR001']),Package)
+
+    def test_get_object(self):
+        createOffers(self.offers)
+        self.assertIsInstance(Offer.get_object('OFR001'),Offer)
+        self.assertIsInstance(Offer.get_object('OFR002'),Offer)
+        self.assertIsInstance(Offer.get_object('OFR003'),Offer)
+        
+    def test_checkOffers(self):
+        createOffers(self.offers)
+        package = Package(['PKG1' ,'5', '5', 'OFR001'])
+        self.assertEqual(package.checkOffer(),False)
+
+        package = Package(['PKG1' ,'70', '5', 'OFR001'])
+        self.assertEqual(package.checkOffer(),True)
+
+        pass
 
 if __name__ == '__main__':
     unittest.main()
