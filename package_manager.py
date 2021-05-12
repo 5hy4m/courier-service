@@ -60,16 +60,17 @@ class PackageManager(Package,Offer,Vehicle):
         return int(n * multiplier) / multiplier
 
     def calculateTime(self,package):
-        print('calculateTime')
         return self.truncate(package.distance/self.max_speed,2)
 
     def calculateTimeTaken(self,combination):
-        vehicle = self.getVehicle()
+        vehicle = self.getVehicle(self.current_time)
         if vehicle.available:
+            # if self.current_time != 0.0:
+            #     import pdb;pdb.set_trace()
             time_arr = [ self.calculateTime(package) for package in combination ]
             # print(time_arr)
-            max_time = max([ self.calculateTime(package) for package in combination ])
-            vehicle.return_time =  max_time * 2
+            max_time = max(time_arr)
+            vehicle.return_time +=  max_time * 2
             vehicle.available = False
 
             self.package_weights = list(filter(lambda x: x not in combination,self.package_weights))
@@ -78,6 +79,7 @@ class PackageManager(Package,Offer,Vehicle):
                 output_string = package.calculateDeliveryCost( self.base_delivery_cost )
                 print(output_string,self.current_time + self.calculateTime(package))
         else:
-            self.current_time += vehicle.return_time
+            self.current_time += vehicle.return_time - self.current_time
+            print('self.current_time',self.current_time)
             vehicle.available = True
             pass

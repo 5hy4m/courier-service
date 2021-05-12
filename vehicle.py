@@ -15,7 +15,8 @@ class Vehicle():
     #         return return_vehicle
         
 
-    def getVehicle(self):
+    def getVehicle(self,current_time):
+        print('getVehicle',[(i.return_time,i.available) for i in self.vehicle_instances])
         return_vehicle = self.vehicle_instances[0] 
         for vehicle in self.vehicle_instances[1:]:
             if return_vehicle.return_time > vehicle.return_time:
