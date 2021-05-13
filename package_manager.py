@@ -5,12 +5,15 @@ from vehicle import Vehicle
 import math
 class PackageManager(Package,Offer,Vehicle):
     def __init__(self,base_delivery_cost,no_of_vehicles,max_speed,max_weight):
-        self.available_vehicles = int(no_of_vehicles)
-        self.max_speed = float(max_speed)
-        self.max_weight = float(max_weight)
-        self.base_delivery_cost = base_delivery_cost
-        self.current_time = 0.00
-        self.package_weights = self.get_weights()
+        try:
+            self.available_vehicles = int(no_of_vehicles)
+            self.max_speed = float(max_speed)
+            self.max_weight = float(max_weight)
+            self.base_delivery_cost = float(base_delivery_cost)
+            self.current_time = 0.0
+            self.package_weights = self.get_weights()
+        except ValueError as e:
+            raise ValueError(e)
 
     def recursive_package(self,package_weights,max_weight,combination,current_index):
         if current_index >= len(package_weights):
@@ -44,7 +47,6 @@ class PackageManager(Package,Offer,Vehicle):
                 if len(combinations) != len(self.package_weights) and (len(combinations) <= 1 or (len(combinations) >= 2 and len(combinations[-2]) <= len(combinations[-1]))):
                     combinations.append(self.find_best(self.package_weights[index:],max_weight))
                 else:
-                    # combinations = combinations[:-1]
                     total_weight_array = [self.summationOfTheArray([combination.weight for combination in combination_arr]) for combination_arr in combinations]
                     # selected_packages = combinations[total_weight_array.index(max(total_weight_array))]
                     max_value = max(total_weight_array)
@@ -52,14 +54,17 @@ class PackageManager(Package,Offer,Vehicle):
                     self.calculateTimeTaken(combinations[index_value])
                     combinations = []
                     break
-                    # self.useVehicle(selected_packages,no_of_vehicles,max_speed)
         pass
     
-    def truncate(self,n, decimals=0):
+    @staticmethod
+    def truncate(n, decimals=0):
         multiplier = 10 ** decimals
         return int(n * multiplier) / multiplier
 
-    def calculateTime(self,package):
+    def calculateDeliveryTime(self,package):
+        if self.max_speed == 0:
+            raise ZeroDivisionError("Max_speed Can't be zero")
+        
         return self.truncate(package.distance/self.max_speed,2)
 
     def calculateTimeTaken(self,combination):
@@ -67,7 +72,7 @@ class PackageManager(Package,Offer,Vehicle):
         if vehicle.available:
             # if self.current_time != 0.0:
             #     import pdb;pdb.set_trace()
-            time_arr = [ self.calculateTime(package) for package in combination ]
+            time_arr = [ self.calculateDeliveryTime(package) for package in combination ]
             # print(time_arr)
             max_time = max(time_arr)
             vehicle.return_time +=  max_time * 2
@@ -77,7 +82,7 @@ class PackageManager(Package,Offer,Vehicle):
             
             for index,package in enumerate(combination):
                 output_string = package.calculateDeliveryCost( self.base_delivery_cost )
-                print(output_string,self.current_time + self.calculateTime(package))
+                print(output_string,self.current_time + self.calculateDeliveryTime(package))
         else:
             self.current_time += vehicle.return_time - self.current_time
             print('self.current_time',self.current_time)
