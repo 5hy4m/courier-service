@@ -28,15 +28,12 @@ def main():
     print("Please Enter The Input")
 
     offers = readOffers()
-    offers = createOffers(offers)
+    createOffers(offers)
 
     base_delivery_cost,no_of_packages = input().split( )
     no_of_packages = int(no_of_packages)
-    base_delivery_cost = int(base_delivery_cost)
+    base_delivery_cost = float(base_delivery_cost)
     packages = createPackages(no_of_packages)
-
-    # for package in packages:
-    #     package.calculateDeliveryCost(base_delivery_cost)
     
     no_of_vehicles,max_speed,max_weight = input().split( )
     no_of_vehicles = int(no_of_vehicles)
@@ -48,19 +45,9 @@ def main():
 
     manager = PackageManager(base_delivery_cost,no_of_vehicles,max_speed,max_weight)
 
-    result = []
     for package in packages:
         manager.calculatePackages(base_delivery_cost,max_weight)
 
-    # for package in packages:
-    #     package.calculatePackages(base_delivery_cost,max_weight)
-        # package.calculatePackages(base_delivery_cost,no_of_vehicles,max_speed,max_weight)
-
-
-    # 100 3
-    # PKG1 5 5 OFR001
-    # PKG2 15 5 OFR002
-    # PKG3 10 100 OFR003
 if __name__ == "__main__":
     main()
 
