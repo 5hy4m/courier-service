@@ -11,6 +11,10 @@ def createOffers(offers):
     return offers
 
 def createPackages(no_of_packages):
+    try:
+        no_of_packages = int(no_of_packages)
+    except ValueError as e:
+        raise e 
     packages = [Package(input().split( )) for _ in range(no_of_packages)]
     return packages
 
@@ -29,16 +33,21 @@ def main():
 
     offers = readOffers()
     createOffers(offers)
-
+    # Getting Base Delivery Cost and No of Packages
     base_delivery_cost,no_of_packages = input().split( )
-    no_of_packages = int(no_of_packages)
-    base_delivery_cost = float(base_delivery_cost)
+
     packages = createPackages(no_of_packages)
     
+    # Getting No of vehicles and Max Speed
     no_of_vehicles,max_speed,max_weight = input().split( )
-    no_of_vehicles = int(no_of_vehicles)
-    max_speed = float(max_speed)
-    max_weight = float(max_weight)
+    
+    try:
+        base_delivery_cost = float(base_delivery_cost)
+        no_of_vehicles = int(no_of_vehicles)
+        max_speed = float(max_speed)
+        max_weight = float(max_weight)
+    except ValueError as e:
+        raise e
 
     for _ in range(no_of_vehicles):
         Vehicle(max_speed,max_weight)

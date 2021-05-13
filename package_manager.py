@@ -35,8 +35,6 @@ class PackageManager(Package,Offer,Vehicle):
         return self.recursive_package(package_weights,max_weight,[],0)
     
     def calculatePackages(self,base_delivery_cost,max_weight):
-        current_time = 0 #hrs
-        total_weight = 0
         combinations = []
         while len(self.package_weights) != 0:
             for index,weight in enumerate(self.package_weights):
@@ -70,20 +68,20 @@ class PackageManager(Package,Offer,Vehicle):
     def calculateTimeTaken(self,combination):
         vehicle = self.getVehicle(self.current_time)
         if vehicle.available:
-            # if self.current_time != 0.0:
-            #     import pdb;pdb.set_trace()
-            time_arr = [ self.calculateDeliveryTime(package) for package in combination ]
-            max_time = max(time_arr)
+            max_time = 0
+            for index,package in enumerate(combination):
+                package_delivery_time = self.calculateDeliveryTime(package)
+                if max_time < package_delivery_time:
+                    max_time = package_delivery_time
+
+                output_string = package.calculateDeliveryCost( self.base_delivery_cost )
+                print(output_string,round(self.current_time + package_delivery_time,2))
+
             vehicle.return_time +=  max_time * 2
             vehicle.available = False
 
             self.package_weights = list(filter(lambda x: x not in combination,self.package_weights))
-            
-            for index,package in enumerate(combination):
-                output_string = package.calculateDeliveryCost( self.base_delivery_cost )
-                print(output_string,self.current_time + self.calculateDeliveryTime(package))
         else:
             self.current_time += vehicle.return_time - self.current_time
-            print('self.current_time',self.current_time)
             vehicle.available = True
             pass
