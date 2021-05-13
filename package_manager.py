@@ -73,7 +73,6 @@ class PackageManager(Package,Offer,Vehicle):
             # if self.current_time != 0.0:
             #     import pdb;pdb.set_trace()
             time_arr = [ self.calculateDeliveryTime(package) for package in combination ]
-            # print(time_arr)
             max_time = max(time_arr)
             vehicle.return_time +=  max_time * 2
             vehicle.available = False

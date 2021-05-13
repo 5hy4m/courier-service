@@ -112,6 +112,6 @@ class TestPackage(unittest.TestCase):
             Package(['PKG4' ,'155', '95', 'OFFR003']).calculateDeliveryCost(100),
             'PKG4 0 2125'
             )
-            
+
 if __name__ == '__main__':
     unittest.main()
