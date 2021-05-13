@@ -1,19 +1,14 @@
 class Vehicle():
     vehicle_instances = []
     def __init__(self,weight,speed):
-        self.weight = float(weight)
-        self.speed = float(speed)
-        self.available = True
-        self.return_time = 0.00
         self.vehicle_instances.append(self)
-    
-    # def findNextReadyVehicle():
-    #     return_vehicle = vehicle_instances[0] 
-    #     for vehicle in vehicle_instances:
-    #         if return_vehicle.return_time > vehicle.return_time:
-    #             return_vehicle = vehicle
-    #         return return_vehicle
-        
+        try:
+            self.weight = float(weight)
+            self.speed = float(speed)
+            self.available = True
+            self.return_time = 0.00
+        except ValueError as e:
+            raise e        
 
     def getVehicle(self,current_time):
         print('getVehicle',[(i.return_time,i.available) for i in self.vehicle_instances])
@@ -22,10 +17,3 @@ class Vehicle():
             if return_vehicle.return_time > vehicle.return_time:
                 return_vehicle = vehicle
             return return_vehicle
-
-    # @classmethod
-    # def get_object(cls,offer_code):
-    #     for instance in cls.instances:
-    #         if instance.code == offer_code:
-    #             return instance
-    #     return None
