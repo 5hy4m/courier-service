@@ -20,7 +20,7 @@
         "discount" : "5",
         "ll_distance": "50",
         "ul_distance": "250",
-        "ll_weight" : "100",
-        "ul_weight" : "250"
+        "ll_weight" : "10",
+        "ul_weight" : "150"
     }
 ]

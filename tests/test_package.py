@@ -11,30 +11,32 @@ from offer import Offer
 from main import createOffers
 
 class TestPackage(unittest.TestCase):
-    offers= [{
+    offers= [
+        {
         "code" :  "OFR001",
         "discount" : "10",
         "ll_distance": "0",
         "ul_distance": "200",
         "ll_weight" : "70",
         "ul_weight" : "200"
-    },
-    {
-        "code" :  "OFR002",
-        "discount" : "7",
-        "ll_distance": "50",
-        "ul_distance": "150",
-        "ll_weight" : "100",
-        "ul_weight" : "250"
-    },
-    {
-        "code" :  "OFR003",
-        "discount" : "5",
-        "ll_distance": "50",
-        "ul_distance": "250",
-        "ll_weight" : "100",
-        "ul_weight" : "250"
-    }]
+        },
+        {
+            "code" :  "OFR002",
+            "discount" : "7",
+            "ll_distance": "50",
+            "ul_distance": "150",
+            "ll_weight" : "100",
+            "ul_weight" : "250"
+        },
+        {
+            "code" :  "OFR003",
+            "discount" : "5",
+            "ll_distance": "50",
+            "ul_distance": "250",
+            "ll_weight" : "10",
+            "ul_weight" : "150"
+        }
+    ]
 
     def test_createPackages(self):
         createOffers(self.offers)
@@ -85,7 +87,7 @@ class TestPackage(unittest.TestCase):
 
         self.assertEqual(
             Package(['PKG3' ,'10', '100', 'OFR003']).calculateDeliveryCost(100),
-            'PKG3 0 175'
+            'PKG3 35 665'
             )
         
         self.assertEqual(
@@ -105,7 +107,7 @@ class TestPackage(unittest.TestCase):
         
         self.assertEqual(
             Package(['PKG4' ,'110', '60', 'OFFR002']).calculateDeliveryCost(100),
-            'PKG4 105 1395'
+            'PKG4 0 1500'
             )
 
         self.assertEqual(

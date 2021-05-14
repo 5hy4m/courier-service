@@ -12,30 +12,32 @@ from main import createOffers
 
 
 class TestOffer(unittest.TestCase):
-    offers= [{
-        "code" :  "OFR001",
-        "discount" : "10",
-        "ll_distance": "0",
-        "ul_distance": "200",
-        "ll_weight" : "70",
-        "ul_weight" : "200"
-    },
-    {
-        "code" :  "OFR002",
-        "discount" : "7",
-        "ll_distance": "50",
-        "ul_distance": "150",
-        "ll_weight" : "100",
-        "ul_weight" : "250"
-    },
-    {
-        "code" :  "OFR003",
-        "discount" : "5",
-        "ll_distance": "50",
-        "ul_distance": "250",
-        "ll_weight" : "100",
-        "ul_weight" : "250"
-    }]
+    offers = [
+        {
+            "code" :  "OFR001",
+            "discount" : "10",
+            "ll_distance": "0",
+            "ul_distance": "200",
+            "ll_weight" : "70",
+            "ul_weight" : "200"
+        },
+        {
+            "code" :  "OFR002",
+            "discount" : "7",
+            "ll_distance": "50",
+            "ul_distance": "150",
+            "ll_weight" : "100",
+            "ul_weight" : "250"
+        },
+        {
+            "code" :  "OFR003",
+            "discount" : "5",
+            "ll_distance": "50",
+            "ul_distance": "250",
+            "ll_weight" : "100",
+            "ul_weight" : "250"
+        }
+    ]
 
     offers_objects = []
 

@@ -76,15 +76,11 @@ class TestPackageManager(unittest.TestCase):
     def test_calculateTimeTaken(self,mock_print):
         Vehicle(2,70)
         packages = [
-                # Package(['PKG1' ,'5', '5', 'OFR001']),
                 Package(['PKG2' ,'75', '125', 'OFR001']),
-                # Package(['PKG3' ,'50', '30', 'OFR001']),
             ]
         manager = PackageManager(100,2,10,200)
         manager.calculateTimeTaken(packages)
         mock_print.assert_called_with('PKG2 147.5 1327.5', 12.5)
-        pass
-
 
 if __name__ == '__main__':
     unittest.main()
