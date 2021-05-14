@@ -11,7 +11,7 @@ class Package(Offer):
             self.name = details[0]
             self.weight = float(details[1])
             self.distance = float(details[2])
-            self.offer = Offer.get_object(details[3])
+            self.offer = self.getOfferObject(details[3])
             self.package_instances.append(self)
         except ValueError as e:
             raise ValueError(e)

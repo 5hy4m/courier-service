@@ -1,9 +1,8 @@
-from offer import Offer
 from package import Package
 from vehicle import Vehicle
 
 import math
-class PackageManager(Package,Offer,Vehicle):
+class PackageManager(Package,Vehicle):
     def __init__(self,base_delivery_cost,no_of_vehicles,max_speed,max_weight):
         try:
             self.available_vehicles = int(no_of_vehicles)

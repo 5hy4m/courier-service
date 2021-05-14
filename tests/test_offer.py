@@ -66,9 +66,9 @@ class TestOffer(unittest.TestCase):
 
     def test_get_object(self):
         createOffers(self.offers)
-        self.assertIsInstance(Offer.get_object('OFR001'),Offer)
-        self.assertIsInstance(Offer.get_object('OFR002'),Offer)
-        self.assertIsInstance(Offer.get_object('OFR003'),Offer)
+        self.assertIsInstance(Offer.getOfferObject('OFR001'),Offer)
+        self.assertIsInstance(Offer.getOfferObject('OFR002'),Offer)
+        self.assertIsInstance(Offer.getOfferObject('OFR003'),Offer)
         
     def test_checkOffers(self):
         createOffers(self.offers)

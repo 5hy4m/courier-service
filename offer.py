@@ -14,7 +14,7 @@ class Offer():
             raise ValueError(e)
 
     @classmethod
-    def get_object(cls,offer_code):
+    def getOfferObject(cls,offer_code):
         for instance in cls.offer_instances:
             if instance.code == offer_code:
                 return instance
