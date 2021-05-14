@@ -16,6 +16,7 @@ class PackageManager(Package,Offer,Vehicle):
             raise ValueError(e)
 
     def recursive_package(self,package_weights,max_weight,combination,current_index):
+        # Recursive Funtion finds possible combinations
         if current_index >= len(package_weights):
             # print([package.weight for package in combination])
             # print('Length Exceeded')
@@ -30,11 +31,9 @@ class PackageManager(Package,Offer,Vehicle):
             if len(combination) == self.package_weights:
                 pass
             return combination
-
-    def find_best(self,package_weights,max_weight):
-        return self.recursive_package(package_weights,max_weight,[],0)
     
-    def calculatePackages(self,base_delivery_cost,max_weight):
+    def calculatePackages(self):
+        # This function finds optimal package combination and calculates delivery time for each package
         combinations = []
         while len(self.package_weights) != 0:
             for index,weight in enumerate(self.package_weights):
@@ -43,16 +42,21 @@ class PackageManager(Package,Offer,Vehicle):
                 #         print(ele.weight,ele.name)
                 #     print("="*50)
                 if len(combinations) != len(self.package_weights) and (len(combinations) <= 1 or (len(combinations) >= 2 and len(combinations[-2]) <= len(combinations[-1]))):
-                    combinations.append(self.find_best(self.package_weights[index:],max_weight))
+                    combinations.append(self.recursive_package(self.package_weights,self.max_weight,[],0))
+
                 else:
-                    total_weight_array = [self.summationOfTheArray([combination.weight for combination in combination_arr]) for combination_arr in combinations]
+                    # for i in combinations:
+                    #     print('*'*50)
+                    #     for j in i:
+                    #         print(j.name,j.weight)
+                    #     print('*'*50)
+                    total_weight_array = [self.summationOfTheArray([package.weight for package in combination]) for combination in combinations]
                     # selected_packages = combinations[total_weight_array.index(max(total_weight_array))]
                     max_value = max(total_weight_array)
                     index_value = total_weight_array.index(max_value)
                     self.calculateTimeTaken(combinations[index_value])
                     combinations = []
                     break
-        pass
     
     @staticmethod
     def truncate(n, decimals=0):
@@ -60,13 +64,15 @@ class PackageManager(Package,Offer,Vehicle):
         return int(n * multiplier) / multiplier
 
     def calculateDeliveryTime(self,package):
+        #calculate delivery time of the given package
         if self.max_speed == 0:
             raise ZeroDivisionError("Max_speed Can't be zero")
         
         return self.truncate(package.distance/self.max_speed,2)
 
     def calculateTimeTaken(self,combination):
-        vehicle = self.getVehicle(self.current_time)
+        #Gets the correct pkg combination to be dispatched and Prints the Output 
+        vehicle = self.getVehicle()
         if vehicle.available:
             max_time = 0
             for index,package in enumerate(combination):
@@ -75,6 +81,10 @@ class PackageManager(Package,Offer,Vehicle):
                     max_time = package_delivery_time
 
                 output_string = package.calculateDeliveryCost( self.base_delivery_cost )
+                # print('#'*50)
+                # for i in combination:
+                #     print(i.name,'weight :',i.weight,'deliverytime :',package_delivery_time,'distance :',i.distance)
+                # print('#'*50)
                 print(output_string,round(self.current_time + package_delivery_time,2))
 
             vehicle.return_time +=  max_time * 2
@@ -83,5 +93,6 @@ class PackageManager(Package,Offer,Vehicle):
             self.package_weights = list(filter(lambda x: x not in combination,self.package_weights))
         else:
             self.current_time += vehicle.return_time - self.current_time
+            # print("CurrentTime :",self.current_time)
             vehicle.available = True
             pass

@@ -6,10 +6,6 @@ currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
-# from package import Package
-# from package_manager import PackageManager
-# from offer import Offer
-# from main import createOffers
 from vehicle import Vehicle
 
 class TestVehicle(unittest.TestCase):

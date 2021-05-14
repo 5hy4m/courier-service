@@ -1,7 +1,8 @@
 import unittest
+from unittest.mock import patch
+
 import os 
 import sys
- 
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
@@ -9,6 +10,7 @@ sys.path.append(parentdir)
 from package import Package
 from package_manager import PackageManager
 from offer import Offer
+from vehicle import Vehicle
 from main import createOffers
 
 class TestPackageManager(unittest.TestCase):
@@ -70,7 +72,19 @@ class TestPackageManager(unittest.TestCase):
         manager = PackageManager(100,2,70,200)
         self.assertEqual(manager.calculateDeliveryTime(package),1.78)
 
-    
+    @patch('builtins.print')
+    def test_calculateTimeTaken(self,mock_print):
+        Vehicle(2,70)
+        packages = [
+                # Package(['PKG1' ,'5', '5', 'OFR001']),
+                Package(['PKG2' ,'75', '125', 'OFR001']),
+                # Package(['PKG3' ,'50', '30', 'OFR001']),
+            ]
+        manager = PackageManager(100,2,10,200)
+        manager.calculateTimeTaken(packages)
+        mock_print.assert_called_with('PKG2 147.5 1327.5', 12.5)
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()

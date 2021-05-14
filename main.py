@@ -6,11 +6,12 @@ from vehicle import Vehicle
 import json 
 
 def createOffers(offers):
-    # Gets list of objects and convert them into class objects
+    # Gets list of objects and convert them into Offer Class objects
     offers = [Offer(offer) for offer in offers]
     return offers
 
 def createPackages(no_of_packages):
+    # Gets not of packages to be created and returns them in an array
     try:
         no_of_packages = int(no_of_packages)
     except ValueError as e:
@@ -18,7 +19,13 @@ def createPackages(no_of_packages):
     packages = [Package(input().split( )) for _ in range(no_of_packages)]
     return packages
 
+def createVehicles(no_of_vehicles,max_speed,max_weight):
+    # Getting No of vehicles , Max Speed and Max Weight
+    for _ in range(no_of_vehicles):
+        Vehicle(max_speed,max_weight)
+
 def readOffers():
+    # Reads Offers from offers.json and returns an array of objects containing offers
     try:
         f = open('offers.json')
         offers = json.load(f)
@@ -29,16 +36,16 @@ def readOffers():
 
 def main():
     print("Courier Service")
-    print("Please Enter The Input")
 
     offers = readOffers()
     createOffers(offers)
+    
     # Getting Base Delivery Cost and No of Packages
     base_delivery_cost,no_of_packages = input().split( )
 
     packages = createPackages(no_of_packages)
     
-    # Getting No of vehicles and Max Speed
+    # Getting No of vehicles , Max Speed and Max Weight
     no_of_vehicles,max_speed,max_weight = input().split( )
     
     try:
@@ -49,15 +56,12 @@ def main():
     except ValueError as e:
         raise e
 
-    for _ in range(no_of_vehicles):
-        Vehicle(max_speed,max_weight)
+    # Creating Vehicles
+    createVehicles(no_of_vehicles,max_speed,max_weight)
 
     manager = PackageManager(base_delivery_cost,no_of_vehicles,max_speed,max_weight)
-
-    for package in packages:
-        manager.calculatePackages(base_delivery_cost,max_weight)
+    manager.calculatePackages()
 
 if __name__ == "__main__":
     main()
 
-    
