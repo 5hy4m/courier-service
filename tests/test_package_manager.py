@@ -82,5 +82,22 @@ class TestPackageManager(unittest.TestCase):
         manager.calculateTimeTaken(packages)
         mock_print.assert_called_with('PKG2 147.5 1327.5', 12.5)
 
+    @patch('builtins.print')
+    def test_calculatePackages(self,mock_print):
+        manager = PackageManager(100,2,10,200)
+        packages = [
+                Package(['PKG1' ,'50', '30', 'OFR001']),
+                Package(['PKG2' ,'75', '125', 'OFR008']),
+                Package(['PKG3' ,'175', '100', 'OFR003']),
+                Package(['PKG4' ,'110', '60', 'OFR002']),
+                Package(['PKG5' ,'155', '95', 'NA']),
+            ]
+        Vehicle(70,200)
+        Vehicle(70,200)
+
+        manager.calculatePackages()
+        mock_print.assert_called_with('PKG1 147.5 1327.5', 12.5)
+        pass
+
 if __name__ == '__main__':
     unittest.main()

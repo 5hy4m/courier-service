@@ -34,8 +34,8 @@ class Package(Offer):
         return functools.reduce(operator.add,array)
     
     @classmethod
-    def get_weights(cls):
-        # We will 
+    def getPackagesSorted(cls):
+        # Sort the Package Objects in ascending order according to weights
         return sorted([instance for instance in cls.package_instances],key=lambda x: x.weight) 
 
     def calculateDeliveryCost(self,base_delivery_cost):

@@ -10,47 +10,37 @@ class PackageManager(Package,Vehicle):
             self.max_weight = float(max_weight)
             self.base_delivery_cost = float(base_delivery_cost)
             self.current_time = 0.0
-            self.package_weights = self.get_weights()
         except ValueError as e:
             raise ValueError(e)
+        
+        self.sorted_packages = self.getPackagesSorted() #Sort Packages with respect to it's weight
 
-    def recursive_package(self,package_weights,max_weight,combination,current_index):
+    def recursive_package(self,sorted_packages,max_weight,combination,current_index):
         # Recursive Funtion finds possible combinations
-        if current_index >= len(package_weights):
+        if current_index >= len(sorted_packages):
             # print([package.weight for package in combination])
             # print('Length Exceeded')
             return combination
 
-        if (len(combination) != 0 and self.summationOfTheArray([package.weight for package in combination]) + package_weights[current_index].weight) <= max_weight:
-            combination.append(package_weights[current_index])
+        if (len(combination) != 0 and self.summationOfTheArray([package.weight for package in combination]) + sorted_packages[current_index].weight) <= max_weight:
+            combination.append(sorted_packages[current_index])
 
-            return self.recursive_package(package_weights,max_weight,combination,current_index+1)
+            return self.recursive_package(sorted_packages,max_weight,combination,current_index+1)
         else:
             # print([package.weight for package in combination])
-            if len(combination) == self.package_weights:
+            if len(combination) == self.sorted_packages:
                 pass
             return combination
     
     def calculatePackages(self):
         # This function finds optimal package combination and calculates delivery time for each package
         combinations = []
-        while len(self.package_weights) != 0:
-            for index,weight in enumerate(self.package_weights):
-                # for elements in combinations:
-                #     for ele in elements:
-                #         print(ele.weight,ele.name)
-                #     print("="*50)
-                if len(combinations) != len(self.package_weights) and (len(combinations) <= 1 or (len(combinations) >= 2 and len(combinations[-2]) <= len(combinations[-1]))):
-                    combinations.append(self.recursive_package(self.package_weights,self.max_weight,[],0))
-
+        while len(self.sorted_packages) != 0:
+            for index,weight in enumerate(self.sorted_packages):
+                if len(combinations) != len(self.sorted_packages) and (len(combinations) <= 1 or (len(combinations) >= 2 and len(combinations[-2]) <= len(combinations[-1]))):
+                    combinations.append(self.recursive_package(self.sorted_packages,self.max_weight,[],0))
                 else:
-                    # for i in combinations:
-                    #     print('*'*50)
-                    #     for j in i:
-                    #         print(j.name,j.weight)
-                    #     print('*'*50)
                     total_weight_array = [self.summationOfTheArray([package.weight for package in combination]) for combination in combinations]
-                    # selected_packages = combinations[total_weight_array.index(max(total_weight_array))]
                     max_value = max(total_weight_array)
                     index_value = total_weight_array.index(max_value)
                     self.calculateTimeTaken(combinations[index_value])
@@ -89,7 +79,7 @@ class PackageManager(Package,Vehicle):
             vehicle.return_time +=  max_time * 2
             vehicle.available = False
 
-            self.package_weights = list(filter(lambda x: x not in combination,self.package_weights))
+            self.sorted_packages = list(filter(lambda x: x not in combination,self.sorted_packages))
         else:
             self.current_time += vehicle.return_time - self.current_time
             # print("CurrentTime :",self.current_time)

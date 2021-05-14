@@ -55,9 +55,9 @@ class TestPackage(unittest.TestCase):
         Package(['PKG1' ,'0', '30', 'OFR001'])
 
         # Check if it returns a list
-        self.assertIsInstance(Package.get_weights(),list)
+        self.assertIsInstance(Package.getPackagesSorted(),list)
 
-        results = Package.get_weights()
+        results = Package.getPackagesSorted()
 
         # Check if it returns a list of Offer Class Instances
         for result in results:
