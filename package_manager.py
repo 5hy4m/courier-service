@@ -18,7 +18,6 @@ class PackageManager(Package,Vehicle):
     def recursive_package(self,sorted_packages,combination,current_index):
         # Recursive Funtion finds possible combinations
         if current_index >= len(sorted_packages):
-            # print('Length Exceeded')
             return combination
 
         if (len(combination) != 0 and self.summationOfTheArray([package.weight for package in combination]) + sorted_packages[current_index].weight) <= self.max_weight:
@@ -68,10 +67,6 @@ class PackageManager(Package,Vehicle):
                     max_time = package_delivery_time
 
                 output_string = package.calculateDeliveryCost( self.base_delivery_cost )
-                # print('#'*50)
-                # for i in combination:
-                #     print(i.name,'weight :',i.weight,'deliverytime :',package_delivery_time,'distance :',i.distance)
-                # print('#'*50)
                 print(output_string,round(self.current_time + package_delivery_time,2))
 
             vehicle.return_time +=  max_time * 2
@@ -80,6 +75,5 @@ class PackageManager(Package,Vehicle):
             self.sorted_packages = list(filter(lambda x: x not in combination,self.sorted_packages))
         else:
             self.current_time += vehicle.return_time - self.current_time
-            # print("CurrentTime :",self.current_time)
             vehicle.available = True
             pass
