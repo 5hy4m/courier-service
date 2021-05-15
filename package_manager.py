@@ -18,18 +18,13 @@ class PackageManager(Package,Vehicle):
     def recursive_package(self,sorted_packages,combination,current_index):
         # Recursive Funtion finds possible combinations
         if current_index >= len(sorted_packages):
-            # print([package.weight for package in combination])
             # print('Length Exceeded')
             return combination
 
         if (len(combination) != 0 and self.summationOfTheArray([package.weight for package in combination]) + sorted_packages[current_index].weight) <= self.max_weight:
             combination.append(sorted_packages[current_index])
-
             return self.recursive_package(sorted_packages[current_index:],combination,current_index+1)
         else:
-            # print([package.weight for package in combination])
-            if len(combination) == self.sorted_packages:
-                pass
             return combination
     
     def find_best(self,index):
@@ -40,8 +35,6 @@ class PackageManager(Package,Vehicle):
         combinations = []
         while len(self.sorted_packages) != 0:
             for index,weight in enumerate(self.sorted_packages):
-                print((len(combinations) , len(self.sorted_packages)))
-                print([[(i.weight,i.name) for i in c] for c in combinations])
                 if len(combinations) != len(self.sorted_packages) and (len(combinations) <= 1 or (len(combinations) >= 2 and len(combinations[-2]) <= len(combinations[-1]))):
                     combinations.append(self.find_best(index))
                 else:
