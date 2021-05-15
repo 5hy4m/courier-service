@@ -15,30 +15,35 @@ class PackageManager(Package,Vehicle):
         
         self.sorted_packages = self.getPackagesSorted() #Sort Packages with respect to it's weight
 
-    def recursive_package(self,sorted_packages,max_weight,combination,current_index):
+    def recursive_package(self,sorted_packages,combination,current_index):
         # Recursive Funtion finds possible combinations
         if current_index >= len(sorted_packages):
             # print([package.weight for package in combination])
             # print('Length Exceeded')
             return combination
 
-        if (len(combination) != 0 and self.summationOfTheArray([package.weight for package in combination]) + sorted_packages[current_index].weight) <= max_weight:
+        if (len(combination) != 0 and self.summationOfTheArray([package.weight for package in combination]) + sorted_packages[current_index].weight) <= self.max_weight:
             combination.append(sorted_packages[current_index])
 
-            return self.recursive_package(sorted_packages,max_weight,combination,current_index+1)
+            return self.recursive_package(sorted_packages[current_index:],combination,current_index+1)
         else:
             # print([package.weight for package in combination])
             if len(combination) == self.sorted_packages:
                 pass
             return combination
     
+    def find_best(self,index):
+        return self.recursive_package(self.sorted_packages[index:],[],0)
+
     def calculatePackages(self):
         # This function finds optimal package combination and calculates delivery time for each package
         combinations = []
         while len(self.sorted_packages) != 0:
             for index,weight in enumerate(self.sorted_packages):
+                print((len(combinations) , len(self.sorted_packages)))
+                print([[(i.weight,i.name) for i in c] for c in combinations])
                 if len(combinations) != len(self.sorted_packages) and (len(combinations) <= 1 or (len(combinations) >= 2 and len(combinations[-2]) <= len(combinations[-1]))):
-                    combinations.append(self.recursive_package(self.sorted_packages,self.max_weight,[],0))
+                    combinations.append(self.find_best(index))
                 else:
                     total_weight_array = [self.summationOfTheArray([package.weight for package in combination]) for combination in combinations]
                     max_value = max(total_weight_array)

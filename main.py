@@ -37,6 +37,7 @@ def readOffers():
 def main():
     print("Courier Service")
 
+    # Creating the offers
     offers = readOffers()
     createOffers(offers)
     
@@ -53,6 +54,8 @@ def main():
         no_of_vehicles = int(no_of_vehicles)
         max_speed = float(max_speed)
         max_weight = float(max_weight)
+        if 0.0 in [base_delivery_cost,no_of_vehicles,max_speed,max_weight]:
+            raise ValueError('It Cannot Be Zero')
     except ValueError as e:
         raise e
 
