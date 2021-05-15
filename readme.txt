@@ -11,4 +11,8 @@ Hii,
     Have to run this command to get started "python main.py" in the root folder
 
     navigate to test folder "python test_xxxx.py" to run tests
+        python test_offer.py
+        python test_package.py
+        python test_vehicle.py
+        python test_package_manager.py
 
