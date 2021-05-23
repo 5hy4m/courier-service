@@ -14,40 +14,45 @@ class PackageManager(Package,Vehicle):
         except ValueError as e:
             raise ValueError(e)
         
-        self.sorted_packages = self.getPackagesSorted() #Sort Packages with respect to it's weight
+        self.packages = self.getPackages() #Gets all package instances in an array
 
     def findTheCombination(self,array2D):
         row = self.no_of_packages
         col = self.max_weight
         combination = []
+
+        # Loop until row or col gets zero
         while row > 0 and col > 0:
-            current_package_weight = self.sorted_packages[row-1].weight
-            # current_value = array2D[row][col]
+            # getting current package(row) weight value from the package objects
+            current_package_weight = self.packages[row-1].weight
+
+            # getting previous package(row) weight value from the 2dArray by doing column of weight - current_package_weight
             previous_element_value = array2D[row-1][col - int(current_package_weight)] 
+
+            # Checking if we do current weight of the column - current_package_weight = value is negative
             is_col_value_negative = (col - int(current_package_weight)) < 0
-            # print((current_package_weight,previous_element_value,current_value))
             
+            # Checking (current cell value) is equal to (previous package(row) with the same column of weight)
             if array2D[row][col] == array2D[row-1][col]:
                 if is_col_value_negative:
+                    # This Package is Not Included
                     row -= 1
                     continue
 
                 if array2D[row][col] == previous_element_value + current_package_weight:
-                    # included
+                    # This Package is Included
                     row -= 1
-                    combination.append(self.sorted_packages[row])
-                    # combination.append(self.sorted_packages[col - current_package_weight])
+                    combination.append(self.packages[row])
                     col = col - int(current_package_weight)
                     continue
                 else:
+                    # This Package is Not Included
                     row -= 1
                     continue
-
             else:
-                # included
+                # This Package is Included
                 row -= 1
-                combination.append(self.sorted_packages[row])
-                # combination.append(self.sorted_packages[col - current_package_weight])
+                combination.append(self.packages[row])
                 col = col - int(current_package_weight)
                 continue
 
@@ -75,7 +80,7 @@ class PackageManager(Package,Vehicle):
                     continue
 
                 # getting current package(row) weight value from the package objects
-                current_package_weight = self.sorted_packages[row-1].weight
+                current_package_weight = self.packages[row-1].weight
 
                 # getting previous package(row) weight value from the 2dArray by doing column of weight - current_package_weight
                 previous_package_weight = array2D[row-1][col - current_package_weight]
@@ -103,16 +108,16 @@ class PackageManager(Package,Vehicle):
                     # Assigning Max value to the current cell
                     array2D[row][col] = max(current_package_weight + previous_package_weight , array2D[row-1][col])
                 else:
-                    # Assign the weight from previous package with the same column of weight
+                    # Assign the (weight from previous package(row) with the same column of weight) to the (current cell)
                     array2D[row][col] = array2D[row-1][col]
         return array2D
-
 
     def calculatePackages(self):
         # This function finds optimal package combination and calculates delivery time for each package
     
         # Iterate until all the packages are delivered
         while self.no_of_packages != 0:
+            # Building 2d Array
             array2D = self.build2dArray()
             print('*'*100)
             for row in array2D:
@@ -120,28 +125,12 @@ class PackageManager(Package,Vehicle):
             print('*'*100)
             # Get the Package combination that needs to be delivered
             package_combination = self.findTheCombination(array2D)
+
             for package in package_combination:  
                 print(package.weight)
 
             #Deliver and calculate time taken for each package in the package combination
             self.calculateTimeTaken(package_combination)
-
-    @staticmethod
-    def truncate(n, decimals=0):
-        multiplier = 10 ** decimals
-        return int(n * multiplier) / multiplier
-
-    def calculateDeliveryTime(self,package):
-        if self.max_speed == 0:
-            raise ZeroDivisionError("Max_speed Can't be zero")
-        
-        # Calculating delivery time of the package and truncate the value to 2 decimals
-        delivery_time = self.truncate(package.distance/self.max_speed,2)
-
-        # Adding the waited time to the delivery time of the package and round the value to 2 decimals
-        package.delivery_time = round(self.current_time + delivery_time,2)
-
-        return package.delivery_time
 
     def calculateTimeTaken(self,combination):
         #Gets the correct pkg combination to be dispatched and Prints the Output 
@@ -152,20 +141,22 @@ class PackageManager(Package,Vehicle):
             max_time = 0
             for package in combination:
                 # Calculating Delivery time of each package
-                package_delivery_time = self.calculateDeliveryTime(package)
+                package_delivery_time = package.calculateDeliveryTime( self.current_time,self.max_speed )
 
                 # Calculating Delivery Cost of each package
                 package.calculateDeliveryCost( self.base_delivery_cost )
 
+                # Getting maximum time taken to deliver the package in the combination array
                 if max_time < package_delivery_time:
                     max_time = package_delivery_time
 
+            # Setting Vehicle return time
             vehicle.return_time +=  max_time * 2
             vehicle.available = False
 
             #Removing the delivered packages
-            self.sorted_packages = list(filter(lambda x: x not in combination,self.sorted_packages))
-            self.no_of_packages = len(self.sorted_packages)
+            self.packages = list(filter(lambda x: x not in combination,self.packages))
+            self.no_of_packages = len(self.packages)
         else:
             # Waiting for the vehicle nearest vehicle to return
             self.current_time += vehicle.return_time - self.current_time

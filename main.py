@@ -44,6 +44,7 @@ def main():
     # Getting Base Delivery Cost and No of Packages
     base_delivery_cost,no_of_packages = input().split( )
 
+    # Creating the packages
     packages = createPackages(no_of_packages)
     
     # Getting No of vehicles , Max Speed and Max Weight
@@ -65,11 +66,17 @@ def main():
     # Creating Vehicles
     createVehicles(no_of_vehicles,max_speed,max_weight)
 
+    #initialize Package Manager
     manager = PackageManager(no_of_packages,base_delivery_cost,no_of_vehicles,max_speed,max_weight)
+    
+    # Calculate package combination, time taken and delivery cost
     manager.calculatePackages()
+    
+    #print the output
     print('*'*100)
     for package in packages:
         print(f'{package.name} {package.discounted_price} {package.delivery_cost} {package.delivery_time}')
+
 if __name__ == "__main__":
     main()
 
