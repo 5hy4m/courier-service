@@ -53,18 +53,23 @@ def main():
         base_delivery_cost = float(base_delivery_cost)
         no_of_vehicles = int(no_of_vehicles)
         max_speed = float(max_speed)
-        max_weight = float(max_weight)
-        if 0.0 in [base_delivery_cost,no_of_vehicles,max_speed,max_weight]:
+        max_weight = int(max_weight)
+
+        # Checking if there are any zero values in base_delivery_cost,no_of_vehicles,max_speed,max_weight
+        if 0 in [base_delivery_cost,no_of_vehicles,max_speed,max_weight] or 0.0 in [base_delivery_cost,no_of_vehicles,max_speed,max_weight]:
             raise ValueError('It Cannot Be Zero')
+
     except ValueError as e:
         raise e
 
     # Creating Vehicles
     createVehicles(no_of_vehicles,max_speed,max_weight)
 
-    manager = PackageManager(base_delivery_cost,no_of_vehicles,max_speed,max_weight)
+    manager = PackageManager(no_of_packages,base_delivery_cost,no_of_vehicles,max_speed,max_weight)
     manager.calculatePackages()
-
+    print('*'*100)
+    for package in packages:
+        print(f'{package.name} {package.discounted_price} {package.delivery_cost} {package.delivery_time}')
 if __name__ == "__main__":
     main()
 

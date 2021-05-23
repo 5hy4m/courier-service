@@ -4,7 +4,7 @@ class Vehicle():
         self.available = True
         self.return_time = 0.00
         try:
-            self.weight = float(weight)
+            self.weight = int(weight)
             self.speed = float(speed)
         except ValueError as e:
             raise e

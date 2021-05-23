@@ -9,9 +9,11 @@ class Package(Offer):
     def __init__(self,details):
         try:
             self.name = details[0]
-            self.weight = float(details[1])
+            self.weight = int(details[1])
             self.distance = float(details[2])
             self.offer = self.getOfferObject(details[3])
+            self.delivery_time = 0.0
+            self.discounted_price = 0.0
             self.package_instances.append(self)
         except ValueError as e:
             raise ValueError(e)
@@ -36,7 +38,7 @@ class Package(Offer):
     @classmethod
     def getPackagesSorted(cls):
         # Sort the Package Objects in ascending order according to weights
-        return sorted([instance for instance in cls.package_instances],key=lambda x: x.weight) 
+        return cls.package_instances
 
     def calculateDeliveryCost(self,base_delivery_cost):
         delivery_cost = base_delivery_cost + (self.weight * 10) + (self.distance * 5)
@@ -49,5 +51,8 @@ class Package(Offer):
 
         delivery_cost = int(delivery_cost) if delivery_cost.is_integer() else delivery_cost
         discount = int(discount) if discount.is_integer() else discount
+
+        self.delivery_cost = delivery_cost
+        self.discounted_price = discount
         return f'{self.name} {discount} {delivery_cost}'
 
