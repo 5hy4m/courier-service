@@ -43,21 +43,15 @@ class TestPackageManager(unittest.TestCase):
 
     def test_create_package_manager(self):
         with self.assertRaises(ValueError):
-            PackageManager('100s',2,0,200)
+            PackageManager(1,'100s',2,0,200)
         with self.assertRaises(ValueError):
-            PackageManager('100','2s',0,200)
+            PackageManager(1,'100','2s',0,200)
         with self.assertRaises(ValueError):
-            PackageManager('100',2,'0s','200')
+            PackageManager(1,'100',2,'0s','200')
         with self.assertRaises(ValueError):
-            PackageManager('100',2,0,'200s')
+            PackageManager(1,'100',2,0,'200s')
         
-        self.assertIsInstance(PackageManager(100,2,0,200),PackageManager)
-
-    def test_truncate(self):
-        self.assertEqual(PackageManager.truncate(17.9999,2),17.99)
-        self.assertEqual(PackageManager.truncate(17.1111,2),17.11)
-        self.assertEqual(PackageManager.truncate(17.19,2),17.19)
-        self.assertEqual(PackageManager.truncate(17,2),17.00)
+        self.assertIsInstance(PackageManager(1,100,2,0,200),PackageManager)
 
     def test_calculateDeliveryTime(self):
         createOffers(self.offers)
@@ -65,39 +59,36 @@ class TestPackageManager(unittest.TestCase):
         
         # Testing the max_speed value
         with self.assertRaises(ZeroDivisionError):
-            manager = PackageManager(100,2,0,200)
-            manager.calculateDeliveryTime(package)
+            manager = PackageManager(1,100,2,0,200)
+            package.calculateDeliveryTime(manager.current_time,manager.max_speed)
 
         # Testing the return value
-        manager = PackageManager(100,2,70,200)
-        self.assertEqual(manager.calculateDeliveryTime(package),1.78)
+        manager = PackageManager(1,100,2,70,200)
+        self.assertEqual(package.calculateDeliveryTime(manager.current_time,manager.max_speed),1.78)
 
-    @patch('builtins.print')
-    def test_calculateTimeTaken(self,mock_print):
-        Vehicle(2,70)
-        packages = [
-                Package(['PKG2' ,'75', '125', 'OFR001']),
-            ]
-        manager = PackageManager(100,2,10,200)
-        manager.calculateTimeTaken(packages)
-        mock_print.assert_called_with('PKG2 147.5 1327.5', 12.5)
-
-    @patch('builtins.print')
-    def test_calculatePackages(self,mock_print):
-        manager = PackageManager(100,2,10,200)
-        packages = [
-                Package(['PKG1' ,'50', '30', 'OFR001']),
-                Package(['PKG2' ,'75', '125', 'OFR008']),
-                Package(['PKG3' ,'175', '100', 'OFR003']),
-                Package(['PKG4' ,'110', '60', 'OFR002']),
-                Package(['PKG5' ,'155', '95', 'NA']),
-            ]
+    def test_build2dArray_and_combination(self):
         Vehicle(70,200)
         Vehicle(70,200)
+        packages = [
+                Package(['PKG1' ,'5', '30', 'OFR001']),
+                Package(['PKG2' ,'3', '125', 'OFR008']),
+                Package(['PKG3' ,'4', '100', 'OFR003']),
+                Package(['PKG4' ,'2', '60', 'OFR002']),
+            ] 
+        manager = PackageManager(4,100,2,70,6)
 
-        manager.calculatePackages()
-        mock_print.assert_called_with('PKG1 147.5 1327.5', 12.5)
-        pass
+        array2D = [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 5, 5],
+            [0, 0, 0, 3, 3, 5, 5],
+            [0, 0, 0, 3, 4, 5, 5],
+            [0, 0, 2, 3, 4, 5, 6]
+        ]
+        
+        self.assertEqual(manager.build2dArray(),array2D)
+        result = manager.findTheCombination(array2D)
+
+        self.assertEqual([i.name for i in result],[packages[3].name,packages[2].name])
 
 if __name__ == '__main__':
     unittest.main()

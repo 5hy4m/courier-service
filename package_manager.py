@@ -56,13 +56,10 @@ class PackageManager(Package,Vehicle):
                 col = col - int(current_package_weight)
                 continue
 
-        # for c in combination:
-        #     print (c.name)
         return combination
 
     def build2dArray(self):
         max_weight = self.max_weight
-
         # Creating 2d Array
         array2D = [ [ 0 for i in range(max_weight+1) ] for j in range(self.no_of_packages+1) ]
         
@@ -84,13 +81,6 @@ class PackageManager(Package,Vehicle):
 
                 # getting previous package(row) weight value from the 2dArray by doing column of weight - current_package_weight
                 previous_package_weight = array2D[row-1][col - current_package_weight]
-
-                # print(current_package_weight,previous_package_weight)
-                # import pdb;pdb.set_trace()
-                
-                if row == 3 and col == 6:
-                    pass
-                    # import pdb;pdb.set_trace()
                 
                 # Checking current package(row) weight < current column of weight
                 if current_package_weight <= col:
@@ -119,21 +109,15 @@ class PackageManager(Package,Vehicle):
         while self.no_of_packages != 0:
             # Building 2d Array
             array2D = self.build2dArray()
-            print('*'*100)
-            for row in array2D:
-                print(row)
-            print('*'*100)
+
             # Get the Package combination that needs to be delivered
             package_combination = self.findTheCombination(array2D)
 
-            for package in package_combination:  
-                print(package.weight)
-
             #Deliver and calculate time taken for each package in the package combination
-            self.calculateTimeTaken(package_combination)
+            self.vehicleAllocation(package_combination)
 
-    def calculateTimeTaken(self,combination):
-        #Gets the correct pkg combination to be dispatched and Prints the Output 
+    def vehicleAllocation(self,combination):
+        #Allocate available vehicles to dispatch the combination 
         vehicle = self.getVehicle()
 
         #checking If vehicle is available 
